@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+  <title>LIFF App Flex Message with Action</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    button {
+      display: none;
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #btnLogin, #btnLogOut {
+      background-color: #4CAF50;
+      color: white;
+    }
+    #btnShare {
+      background-color: #0084FF;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to My LIFF App</h1>
+   <button id="btnLogin" onclick="liff.login()">Log In</button>
+  <button id="btnLogOut" onclick="logOut()">Log Out</button>
+  <button id="btnShare" onclick="sendFlexMessage()">Share Flex Message with Action</button>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script>
+      async function sendFlexMessage() {
+      try {
+        const result = await liff.shareTargetPicker([
+          {
+            "type": "flex",
+            "altText": "Share Target Picker",
+            "contents": {
+              "type": "bubble",
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "Click the button to share",
+                    "weight": "bold",
+                    "size": "xl",
+                    "align": "center"
+                  },
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "uri",  
+                      "label": "Share",
+                      "uri": "https://liff.line.me/2006427075-1ye9Ygaj" 
+                    },
+                    "style": "primary",
+                    "color": "#0084FF"
+                  }
+                ]
+              }
+            }
+          }
+        ]);
+        if (result) {
+          alert('Message sent successfully!');
+        } else {
+          alert('ShareTargetPicker was canceled.');
+        }
+      } catch (error) {
+        console.error('Error sending share:', error);
+        alert('Failed to send message.');
+      }
+    }
+      function logOut() {
+      liff.logout();
+      window.location.reload();
+    }
+       async function main() {
+      // เริ่มต้น LIFF ด้วย LIFF ID ของคุณ (แทนที่ "YOUR-LIFF-ID" ด้วย ID จริง)
+      await liff.init({ liffId: "YOUR-LIFF-ID" });
+           if (liff.isLoggedIn()) {
+        document.getElementById("btnShare").style.display = "inline-block";
+        document.getElementById("btnLogOut").style.display = "inline-block";
+      } else {
+        document.getElementById("btnLogin").style.display = "inline-block";
+      }
+    }
+     main();
+  </script>
+</body>
+</html>
